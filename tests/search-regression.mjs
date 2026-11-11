@@ -1,37 +1,27 @@
 /**
  * Automated Search Quality & Performance Regression Suite
- * Covers Section 12 test cases across brand, manufacturer, composition,
- * combined attributes, joined spacing, strengths, Hindi/Devanagari queries,
- * negative relevance checks, equivalent brand discovery, and latency percentiles.
+ * Covers brand, manufacturer, composition, combined attributes, joined spacing,
+ * strengths, Hindi/Devanagari queries, negative relevance checks, equivalent
+ * brand discovery, and latency percentiles via the shared search engine module.
  *
  * Usage: node tests/search-regression.mjs
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
-import vm from 'node:vm';
 import { performance } from 'node:perf_hooks';
 import { fileURLToPath } from 'node:url';
+import { createOphthalmicSearchEngine } from '../public/search-engine.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 
-const appSrc = fs.readFileSync(path.join(rootDir, 'public', 'app.js'), 'utf8');
 const db = JSON.parse(
   fs.readFileSync(path.join(rootDir, 'public', 'assets', 'data', 'ophthalmic-products.json'), 'utf8')
 );
 
-const sandbox = { console };
-vm.createContext(sandbox);
-const startMarker = appSrc.indexOf('function createOphthalmicSearchEngine');
-const endMarker = appSrc.indexOf('// 6. Accessible Validation');
-if (startMarker === -1 || endMarker === -1) {
-  throw new Error('Could not locate createOphthalmicSearchEngine block in app.js');
-}
-vm.runInContext(appSrc.slice(startMarker, endMarker), sandbox);
-
 const t0 = performance.now();
-const engine = sandbox.createOphthalmicSearchEngine(db.items);
+const engine = createOphthalmicSearchEngine(db.items);
 const initMs = performance.now() - t0;
 
 const checks = [

@@ -1,0 +1,11 @@
+{
+  "name": "drishti-medical-store",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-catalog.mjs",
+    "test": "node tests/search-regression.mjs && node tests/discovery-regression.mjs",
+    "dev": "npx wrangler dev"
+  }
+}

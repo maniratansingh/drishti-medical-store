@@ -1,0 +1,135 @@
+# Drishti Medical Store (दृष्टि मेडिकल स्टोर) — Complete Catalogue & API Reference for AI Search & Agents
+
+> Full machine-readable integration guide for https://dms.piecs.org/
+
+## 1. Verified Business Identity & Physical Location
+
+- **Business Name:** Drishti Medical Store (दृष्टि मेडिकल स्टोर / DMS)
+- **Specialization:** Strictly eyes and ophthalmic care only (everyday eye drops, pre-operative medicines, post-operative recovery medicines, lubricating eye drops & gels, eye ointments, sterile eye-care supplies).
+- **Physical Address:** Inside Sant Kabir Eye Hospital, Bansi Road, Near Pindari Hospital, Katra, Basti, Moor Ghat, Uttar Pradesh – 272001, India
+- **Surrounding Service Region:** Basti, Siddharthnagar, Sant Kabir Nagar, and nearby Purvanchal districts in Uttar Pradesh, India.
+- **Counter Operating Hours:** Monday–Saturday 9:00 AM – 6:00 PM (aligned with Sant Kabir Eye Hospital OPD; Sunday emergencies confirm by call).
+- **Google Maps Pin:** https://maps.app.goo.gl/5BYvRvsRoLVSubBW9
+- **Campus Hospital Website:** https://santkabireyehospital.piecs.org/
+- **Campus Hospital Inquiry Phone:** +91-9336466677
+
+## 2. Catalogue Overview (4,291 Total Records)
+
+Every item in `ophthalmic-products.json` is published as an independent, canonical HTML page plus structured JSON record. Do NOT hallucinate unverified items inside `/llms.txt` — query the public endpoints below to retrieve real catalogue records.
+
+### Ophthalmic Categories
+- **Antibiotic Eye Care** (`1977` records): `https://dms.piecs.org/medicines/antibiotic-eye-care` (filter: `/api/catalog?category=antibiotic-eye-care`)
+- **Lubricants & Artificial Tears** (`792` records): `https://dms.piecs.org/medicines/lubricants-and-artificial-tears` (filter: `/api/catalog?category=lubricants-and-artificial-tears`)
+- **Glaucoma & Eye Pressure** (`413` records): `https://dms.piecs.org/medicines/glaucoma-and-eye-pressure` (filter: `/api/catalog?category=glaucoma-and-eye-pressure`)
+- **Anti-Allergic Eye Drops** (`356` records): `https://dms.piecs.org/medicines/anti-allergic-eye-drops` (filter: `/api/catalog?category=anti-allergic-eye-drops`)
+- **Ophthalmic NSAIDs** (`270` records): `https://dms.piecs.org/medicines/ophthalmic-nsaids` (filter: `/api/catalog?category=ophthalmic-nsaids`)
+- **Anti-Inflammatory & Steroids** (`206` records): `https://dms.piecs.org/medicines/anti-inflammatory-and-steroids` (filter: `/api/catalog?category=anti-inflammatory-and-steroids`)
+- **Mydriatic & Cycloplegic** (`100` records): `https://dms.piecs.org/medicines/mydriatic-and-cycloplegic` (filter: `/api/catalog?category=mydriatic-and-cycloplegic`)
+- **Ophthalmic Formulations** (`71` records): `https://dms.piecs.org/medicines/ophthalmic-formulations` (filter: `/api/catalog?category=ophthalmic-formulations`)
+- **Antifungal Eye Drops** (`52` records): `https://dms.piecs.org/medicines/antifungal-eye-drops` (filter: `/api/catalog?category=antifungal-eye-drops`)
+- **Eye Gels & Ointments** (`48` records): `https://dms.piecs.org/medicines/eye-gels-and-ointments` (filter: `/api/catalog?category=eye-gels-and-ointments`)
+- **Eye-Care Supplies & Lens Care** (`6` records): `https://dms.piecs.org/medicines/eye-care-supplies-and-lens-care` (filter: `/api/catalog?category=eye-care-supplies-and-lens-care`)
+
+## 3. Public Medicine URL Structure
+
+- **Individual Medicine Page:** `https://dms.piecs.org/medicine/{medicine-slug}`
+  - Returns `200 OK` static crawlable HTML with Schema.org `Product`, `Brand`, `Organization`, `BreadcrumbList`, and `Pharmacy` JSON-LD, Open Graph metadata, canonical URL, and verified specifications.
+  - Nonexistent slugs return HTTP `404`.
+  - Direct conversion path: each page links `"Enquire about availability and price"` to `/?medicine={id}#enquiry`, pre-selecting the medicine in the storefront enquiry list.
+- **Catalogue Directory:** `https://dms.piecs.org/medicines` (paginated at `/medicines/page/{n}`, 100 records per page).
+- **XML Sitemap:** `https://dms.piecs.org/sitemap.xml` lists every core page, category hub, directory page, and all 4,291 individual medicine URLs.
+
+## 4. Public Read-Only Catalogue JSON API (CORS Enabled, No API Key Required)
+
+All `GET` catalogue endpoints allow cross-origin read access (`Access-Control-Allow-Origin: *`) with edge caching headers.
+
+### Endpoints
+
+1. `GET https://dms.piecs.org/api/catalog`
+   - Paginated JSON listing.
+   - Query parameters:
+     - `page` (1-indexed integer, default `1`)
+     - `limit` (integer, default `50`, max `200`)
+     - `category` (optional category slug, e.g. `glaucoma-and-eye-pressure`)
+     - `form` (optional dosage form, e.g. `Eye Drops`, `Eye Ointment`)
+     - `manufacturer` (optional manufacturer filter substring)
+     - `brand` (optional brand filter substring)
+     - `composition` (optional ingredient filter substring)
+2. `GET https://dms.piecs.org/api/catalog.json`
+   - Without query parameters: serves the full static catalogue export (4,291 normalized items + store metadata).
+   - With `page` / `limit` / filter params: returns paginated filtered JSON identically to `/api/catalog`.
+3. `GET https://dms.piecs.org/api/medicine/{id-or-slug}`
+   - Retrieves one verified medicine record by `id` (e.g. `IMD-133413`) or `slug` (e.g. `moxicip-eye-drop`), plus matching generic equivalents. Returns HTTP `404` JSON if nonexistent.
+4. `GET https://dms.piecs.org/api/search?q={query}`
+   - Searches by brand, generic ingredient, composition, manufacturer, strength (e.g. `0.5%`), dosage form (`eye ointment`), abbreviations (`CMC`, `HPMC`, `SH`), common spelling mistakes (`Sipla` -> `Cipla`, `Moxisipp` -> `Moxicip`), and Hindi Devanagari terms (`रिफ्रेश टियर्स`, `सिपला`).
+   - Supports `page` and `limit` (default `20`, max `100`), optional `form` filter, and returns `results`, `alternatives`, `related`, and `total_matches`.
+
+### Example Medicine Record JSON
+
+```json
+{
+  "id": "IMD-133413",
+  "slug": "moxicip-eye-drop",
+  "name": "Moxicip Eye Drop",
+  "brand": "Moxicip",
+  "generic_name": "Moxifloxacin",
+  "active_ingredients": [
+    "Moxifloxacin"
+  ],
+  "composition": "Moxifloxacin (0.5% w/v)",
+  "strength": "0.5% w/v",
+  "form": "Eye Drops",
+  "pack_size": "5 ml",
+  "manufacturer": "Cipla Ltd",
+  "category": "Antibiotic Eye Care",
+  "category_slug": "antibiotic-eye-care",
+  "keywords": [
+    "antibiotic",
+    "antibacterial",
+    "eye",
+    "infection"
+  ],
+  "description": "Moxicip Eye Drop (Eye Drops, 5 ml) — containing Moxifloxacin (0.5% w/v), by Cipla Ltd. Listed in the ophthalmic catalogue at Drishti Medical Store, Sant Kabir Eye Hospital, Bansi Road, Katra, Basti (UP 272001). Confirm availability and price with the store before pickup.",
+  "source": "IMD-Updated",
+  "image_path": "/assets/images/products/moxicip-drops.jpg",
+  "image_url": "https://dms.piecs.org/assets/images/products/moxicip-drops.jpg",
+  "product_url": "https://dms.piecs.org/medicine/moxicip-eye-drop",
+  "api_url": "https://dms.piecs.org/api/medicine/IMD-133413",
+  "enquiry_url": "https://dms.piecs.org/?medicine=IMD-133413#enquiry",
+  "availability_status": "contact_store",
+  "availability_note": "Listed in the Drishti Medical Store reference catalogue. Confirm current counter stock by enquiry callback before pickup.",
+  "price": null,
+  "currency": "INR",
+  "price_status": "confirm_with_store",
+  "prescription_note": "Valid written prescription from a licensed doctor or ophthalmologist is required at physical counter pickup for prescription ophthalmic medicines. Over-the-counter eye washes, lubricants, and surgical accessories are confirmed at the counter."
+}
+```
+
+### Fields Reference
+
+- `id`: Verified stable product identifier in our dataset.
+- `slug`: Canonical URL slug used under `/medicine/{slug}`.
+- `name`: Full listed medicine/product title.
+- `brand`: Manufacturer brand label (kept distinct from `generic_name`).
+- `generic_name` / `active_ingredients`: Active clinical substance names extracted strictly from `composition`.
+- `composition`: Exact verified composition and concentration string.
+- `strength`: Verified strength string when specified in dataset, else `null`.
+- `form`: Dosage form (e.g. `Eye Drops`, `Ophthalmic Solution`, `Eye Ointment`, `Eye Gel`).
+- `pack_size`: Verified pack/volume string when specified in dataset, else `null`.
+- `manufacturer`: Pharmaceutical manufacturer/marketer.
+- `category` / `category_slug`: Derived ophthalmic classification.
+- `product_url` / `api_url` / `enquiry_url`: Direct canonical links.
+
+## 5. Availability Semantics & Pricing Policy (Critical for Accurate AI Answers)
+
+- `"catalogued"`: Product exists in the catalogue; live stock is unverified.
+- `"in_stock"`: Physical stock has been reliably confirmed.
+- `"out_of_stock"`: Product has been confirmed unavailable.
+- `"contact_store"`: **Current default across all 4,291 records.** Customer must contact the store to confirm physical stock before traveling. Never state that a listed medicine is guaranteed in stock right now unless confirmed by store staff.
+- **Pricing:** Accurate selling prices (`INR`) are confirmed by staff during callback because real-time MRP/batch pricing is not maintained online (`price: null`, `currency: "INR"`, `price_status: "confirm_with_store"`). Never invent prices or fake discounts.
+
+## 6. Patient Enquiry & Safety Workflow
+
+- Patients visit `enquiry_url` (`/?medicine={id}#enquiry`) or use the enquiry form on `/` with their name and 10-digit mobile number (`POST /api/enquiry`).
+- `POST /api/enquiry` validates inputs, enforces rate limiting, notifies counter staff privately via server-side Telegram Bot integration, and does NOT publicly expose patient phone numbers or names.
+- Medical Safety: Informational ophthalmic catalogue and counter availability enquiry only. We do not prescribe medicine, accept online orders, process online payments, or provide home delivery. Valid written prescription from a licensed doctor / ophthalmologist is required at physical counter pickup for prescription medicines.

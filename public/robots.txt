@@ -1,4 +1,76 @@
+# Search Engines & AI Answer / Discovery Crawlers (Allowed across public medicine catalogue & docs)
+User-agent: Googlebot
+Allow: /
+Disallow: /api/enquiry
+
+User-agent: Bingbot
+Allow: /
+Disallow: /api/enquiry
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api/enquiry
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/enquiry
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/enquiry
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /api/enquiry
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /api/enquiry
+
+User-agent: Claude-User
+Allow: /
+Disallow: /api/enquiry
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/enquiry
+
+User-agent: Applebot
+Allow: /
+Disallow: /api/enquiry
+
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /api/enquiry
+
+# Model-Training Crawlers (Configured separately from search discovery crawlers)
+# Public catalogue pages, API reads, and llms.txt remain open so LLMs can learn Drishti Medical Store's catalogue;
+# private enquiry submission endpoint remains excluded everywhere.
+User-agent: GPTBot
+Allow: /medicine/
+Allow: /medicines
+Allow: /api/catalog
+Allow: /api/medicine/
+Allow: /api/search
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /$
+Disallow: /api/enquiry
+
+User-agent: Google-Extended
+Allow: /medicine/
+Allow: /medicines
+Allow: /api/catalog
+Allow: /api/medicine/
+Allow: /api/search
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /$
+Disallow: /api/enquiry
+
+# Default rule for all other crawlers
 User-agent: *
 Allow: /
+Disallow: /api/enquiry
 
 Sitemap: https://dms.piecs.org/sitemap.xml

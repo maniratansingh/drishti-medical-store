@@ -3398,6 +3398,404 @@ dialog.product-dialog::backdrop {
    Forced Colors (Windows High Contrast) Support
    ========================================================================== */
 
+/* ==========================================================================
+   Medicine Detail, Crawlable Directory, Breadcrumbs & Pagination
+   ========================================================================== */
+
+.subpage-main {
+  padding-block: clamp(1.25rem, 3vw, 2.5rem) clamp(4.5rem, 8vw, 5.5rem);
+}
+
+.breadcrumb {
+  margin-block-end: 1.25rem;
+  font-size: 0.875rem;
+}
+
+.breadcrumb > ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.45rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumb > ol > li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-inline-size: 0;
+}
+
+.breadcrumb > ol > li + li::before {
+  content: "/";
+  content: "/" / "";
+  color: var(--color-ink-muted);
+}
+
+.breadcrumb > ol > li > a {
+  color: var(--color-brand);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  padding-block: 0.25rem;
+  word-break: break-word;
+}
+
+.breadcrumb > ol > li > a:hover {
+  color: var(--color-brand-hover);
+}
+
+.breadcrumb > ol > li > a[aria-current="page"] {
+  color: var(--color-ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.breadcrumb > ol > li > a:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
+  border-radius: 3px;
+  position: relative;
+  z-index: 1;
+}
+
+.detail-hero-card,
+.detail-card,
+.directory-head {
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+}
+
+.detail-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (min-width: 48rem) {
+  .detail-hero-grid:not(.detail-hero-grid--no-img) {
+    grid-template-columns: minmax(12rem, 17rem) minmax(0, 1fr);
+  }
+}
+
+.detail-media {
+  margin: 0;
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  background-color: #ffffff;
+  display: grid;
+  place-items: center;
+  block-size: clamp(11rem, 32vw, 15rem);
+}
+
+@media (min-width: 48rem) {
+  .detail-media {
+    block-size: auto;
+    aspect-ratio: 1 / 1;
+  }
+}
+
+.detail-media img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.detail-header-copy {
+  display: grid;
+  gap: 0.9rem;
+  min-inline-size: 0;
+}
+
+.detail-header-copy h1 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+  line-height: 1.18;
+  overflow-wrap: anywhere;
+}
+
+.detail-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.detail-badges .badge {
+  text-decoration: none;
+}
+
+.detail-subtitle {
+  margin: 0;
+  max-inline-size: 66ch;
+  color: var(--color-ink-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.detail-status-banner {
+  padding-block: 0.7rem;
+  max-inline-size: 66ch;
+  border-block: 1px solid var(--color-border);
+  color: var(--color-ink);
+  font-size: 0.9375rem;
+}
+
+.detail-status-banner strong {
+  display: block;
+  margin-block-end: 0.25rem;
+}
+
+.detail-status-banner p {
+  margin: 0;
+  color: var(--color-ink-secondary);
+}
+
+.detail-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.detail-two-col {
+  margin-block-start: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 56rem) {
+  .detail-two-col {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.detail-card h2,
+.directory-head h1 {
+  margin-top: 0;
+  font-family: var(--font-heading);
+}
+
+.detail-spec-dl {
+  margin: 0;
+  display: grid;
+  gap: 0;
+}
+
+.detail-spec-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.2rem;
+  padding-block: 0.7rem;
+  border-block-end: 1px solid var(--color-border);
+}
+
+@media (min-width: 36rem) {
+  .detail-spec-row {
+    grid-template-columns: minmax(10rem, 13.5rem) minmax(0, 1fr);
+    gap: 1rem;
+  }
+}
+
+.detail-spec-row:last-child {
+  border-block-end: 0;
+}
+
+.detail-spec-row dt {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.detail-spec-row dd {
+  margin: 0;
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+}
+
+.detail-disclaimer-note {
+  margin-block: 1rem 0;
+  padding-block-start: 0.85rem;
+  border-block-start: 1px solid var(--color-border);
+  font-size: 0.875rem;
+  color: var(--color-ink-secondary);
+}
+
+.detail-alternatives {
+  margin-block-start: 2rem;
+  padding-block-start: 1.5rem;
+  border-block-start: 1px solid var(--color-border);
+}
+
+.detail-alternatives h2 {
+  margin-top: 0;
+  font-family: var(--font-heading);
+}
+
+.section-sub {
+  margin-block: -0.25rem 1rem;
+  max-inline-size: 66ch;
+  color: var(--color-ink-secondary);
+}
+
+.directory-head {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.directory-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-block-start: 0.25rem;
+}
+
+.directory-cats .filter-pill {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.directory-cats .filter-pill.is-current,
+.pagination-link.is-current {
+  background-color: var(--color-brand);
+  color: var(--color-brand-text);
+  border-color: var(--color-brand);
+}
+
+.directory-page-status {
+  margin-block: 1.25rem 0.75rem;
+  font-size: 0.9375rem;
+  color: var(--color-ink-secondary);
+}
+
+.directory-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+}
+
+@media (min-width: 44rem) {
+  .directory-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 66rem) {
+  .directory-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.directory-card {
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-glass-strong);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: 0.4rem;
+  align-content: start;
+}
+
+.directory-card-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-brand);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.directory-card-title:hover,
+.result-name-link:hover {
+  text-decoration: underline;
+  color: var(--color-brand-hover);
+}
+
+.directory-card-meta {
+  font-size: 0.84rem;
+  color: var(--color-ink-muted);
+}
+
+.directory-card-comp {
+  font-size: 0.875rem;
+  color: var(--color-ink-secondary);
+}
+
+.directory-card-actions {
+  margin-block-start: 0.35rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  font-size: 0.875rem;
+}
+
+.result-name-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.pagination-nav {
+  margin-block-start: 1.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.pagination-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.pagination-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 2.75rem;
+  min-block-size: 2.75rem;
+  padding-inline: 0.65rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.pagination-link:hover {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+}
+
+.pagination-disabled,
+.pagination-ellipsis {
+  color: var(--color-ink-muted);
+  padding-inline: 0.4rem;
+  font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   Forced Colors (Windows High Contrast) Support
+   ========================================================================== */
 @media (forced-colors: active) {
   .site-header,
   .metric-card,
@@ -3409,6 +3807,11 @@ dialog.product-dialog::backdrop {
   .inquiry-form-card,
   .catalog-controls,
   .floating-enquiry-bar,
+  .detail-hero-card,
+  .detail-card,
+  .directory-head,
+  .directory-card,
+  .pagination-link,
   dialog.product-dialog {
     border: 1px solid CanvasText;
     box-shadow: none;
@@ -3417,10 +3820,16 @@ dialog.product-dialog::backdrop {
 
   .btn-primary,
   .filter-pill[aria-pressed="true"],
+  .directory-cats .filter-pill.is-current,
+  .pagination-link.is-current,
   .site-menu .nav-cta a {
     border: 2px solid ButtonText;
     background: Highlight;
     color: HighlightText;
+  }
+
+  .breadcrumb > ol > li > a[aria-current="page"] {
+    text-decoration: underline;
   }
 
   .site-menu li a[aria-current="page"]::after {
