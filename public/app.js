@@ -1608,8 +1608,10 @@ function initCatalogueAndEnquiry(announcer) {
   const loadMoreWrap = document.getElementById('search-load-more-wrap');
   const loadMoreBtn = document.getElementById('search-load-more-btn');
   const altSection = document.getElementById('search-alternatives-section');
+  const altCountEl = document.getElementById('search-alt-count');
   const altList = document.getElementById('search-alternatives-list');
   const relSection = document.getElementById('search-related-section');
+  const relCountEl = document.getElementById('search-related-count');
   const relList = document.getElementById('search-related-list');
   const fallbackBox = document.getElementById('search-fallback-box');
   const addUnmatchedBtn = document.getElementById('add-unmatched-query-btn');
@@ -1679,7 +1681,7 @@ function initCatalogueAndEnquiry(announcer) {
         if (data && Array.isArray(data.items) && data.items.length > 0) {
           searchEngine.setItems(data.items, true);
           if (searchSourceBadge) {
-            searchSourceBadge.textContent = `${data.items.length.toLocaleString('en-IN')} Indian Ophthalmic Items`;
+            searchSourceBadge.textContent = `${data.items.length.toLocaleString('en-IN')} indexed`;
           }
           if (medSearchInput && medSearchInput.value.trim().length >= 2) {
             renderSearchResults(medSearchInput.value);
@@ -1765,6 +1767,9 @@ function initCatalogueAndEnquiry(announcer) {
 
     if (items.length > 0) {
       clearSelectionError();
+      if (selectedPanel) selectedPanel.hidden = false;
+    } else if (selectedPanel && !selectedPanel.classList.contains('has-error')) {
+      selectedPanel.hidden = true;
     }
 
     items.forEach((item) => {
@@ -1839,7 +1844,7 @@ function initCatalogueAndEnquiry(announcer) {
         btn.className = isSelected
           ? 'btn btn-secondary btn-sm result-action-btn js-select-search-item'
           : 'btn btn-primary btn-sm result-action-btn js-select-search-item';
-        btn.textContent = isSelected ? 'Selected ✓' : 'Select';
+        btn.textContent = isSelected ? 'Added ✓' : '+ Add';
         btn.closest('.search-result-card')?.classList.toggle('is-selected', isSelected);
       });
     });
@@ -1907,13 +1912,12 @@ function initCatalogueAndEnquiry(announcer) {
     appendHighlightedText(titleEl, rec.n, highlightTerms);
     titleRow.append(titleEl);
 
-    if (rec.b && rec.b.toLowerCase() !== rec.n.toLowerCase()) {
-      const brandTag = document.createElement('span');
-      brandTag.className = 'result-brand-tag';
-      appendHighlightedText(brandTag, rec.b, highlightTerms);
-      titleRow.append(brandTag);
-    }
-    if (rec._matchReason) {
+    // Only surface non-obvious match badges (typo/synonym/alternative), never generic "Exact Match" spam
+    if (
+      rec._matchReason &&
+      !/^exact\s+(product|brand)/i.test(rec._matchReason) &&
+      !/^partial\s+brand/i.test(rec._matchReason)
+    ) {
       const reasonPill = document.createElement('span');
       reasonPill.className = 'match-reason-pill';
       reasonPill.textContent = rec._matchReason;
@@ -1921,35 +1925,31 @@ function initCatalogueAndEnquiry(announcer) {
     }
     body.append(titleRow);
 
-    if (rec.m) {
-      const mfrEl = document.createElement('div');
-      mfrEl.className = 'result-meta';
-      const strongM = document.createElement('strong');
-      strongM.textContent = 'Manufacturer: ';
-      mfrEl.append(strongM);
-      appendHighlightedText(mfrEl, rec.m, highlightTerms);
-      body.append(mfrEl);
+    const subParts = [rec.m, rec.f, rec.p].filter(Boolean);
+    if (subParts.length > 0) {
+      const subEl = document.createElement('div');
+      subEl.className = 'result-meta result-meta-sub';
+      appendHighlightedText(subEl, subParts.join(' • '), highlightTerms);
+      body.append(subEl);
     }
 
-    if (rec.c) {
-      const compEl = document.createElement('div');
-      compEl.className = 'result-meta';
-      const strongC = document.createElement('strong');
-      strongC.textContent = 'Composition: ';
-      compEl.append(strongC);
-      appendHighlightedText(compEl, rec.c, highlightTerms);
-      body.append(compEl);
+    const saltParts = [];
+    if (rec.c) saltParts.push(rec.c);
+    if (rec.s) {
+      const existingLower = `${rec.n || ''} ${rec.c || ''} ${rec.p || ''}`.toLowerCase();
+      const extraStrengthParts = rec.s
+        .split(/\s*•\s*/)
+        .map((x) => x.trim())
+        .filter((x) => x && !existingLower.includes(x.toLowerCase()));
+      if (extraStrengthParts.length > 0) {
+        saltParts.push(extraStrengthParts.join(' • '));
+      }
     }
-
-    if (rec.s || rec.f) {
-      const strEl = document.createElement('div');
-      strEl.className = 'result-meta';
-      const strongS = document.createElement('strong');
-      strongS.textContent = 'Variant: ';
-      strEl.append(strongS);
-      const variantText = [rec.s, rec.f].filter(Boolean).join(' • ');
-      appendHighlightedText(strEl, variantText, highlightTerms);
-      body.append(strEl);
+    if (saltParts.length > 0) {
+      const saltEl = document.createElement('div');
+      saltEl.className = 'result-meta result-meta-comp';
+      appendHighlightedText(saltEl, saltParts.join(' • '), highlightTerms);
+      body.append(saltEl);
     }
 
     const selectBtn = document.createElement('button');
@@ -1960,13 +1960,13 @@ function initCatalogueAndEnquiry(announcer) {
     selectBtn.dataset.selectedKey = key;
     selectBtn.dataset.recordId = rec.id || '';
     selectBtn.setAttribute('aria-pressed', String(isSelected));
-    selectBtn.textContent = isSelected ? 'Selected ✓' : 'Select';
+    selectBtn.textContent = isSelected ? 'Added ✓' : '+ Add';
 
     li.append(body, selectBtn);
     return li;
   };
 
-  const PAGE_SIZE = 15;
+  const PAGE_SIZE = 6;
   let currentScoredCache = [];
   let currentShownCount = 0;
   let currentHighlightTerms = [];
@@ -2024,9 +2024,9 @@ function initCatalogueAndEnquiry(announcer) {
 
     if (searchStatusEl) {
       if (totalMatches === 0) {
-        searchStatusEl.textContent = `No exact database match for "${trimmed}"`;
+        searchStatusEl.textContent = `No exact match for "${trimmed}"`;
       } else {
-        searchStatusEl.textContent = `${totalMatches} matching result${totalMatches === 1 ? '' : 's'} for "${trimmed}"`;
+        searchStatusEl.textContent = `${totalMatches} result${totalMatches === 1 ? '' : 's'}`;
       }
     }
 
@@ -2066,13 +2066,16 @@ function initCatalogueAndEnquiry(announcer) {
       if (loadMoreWrap) loadMoreWrap.hidden = true;
     }
 
-    // Verified Alternative Brands (Section 8)
+    // Verified Alternative Brands (Collapsed native <details> disclosure)
     if (altSection && altList) {
       altList.textContent = '';
-      if (alternatives.length > 0) {
+      altSection.open = false;
+      const altSlice = alternatives.slice(0, 6);
+      if (altCountEl) altCountEl.textContent = String(altSlice.length);
+      if (altSlice.length > 0) {
         const frag = document.createDocumentFragment();
-        alternatives.slice(0, 6).forEach((rec) => {
-          frag.append(buildResultCard({ ...rec, _matchReason: 'Same Composition & Strength' }, highlightTerms));
+        altSlice.forEach((rec) => {
+          frag.append(buildResultCard(rec, highlightTerms));
         });
         altList.append(frag);
         altSection.hidden = false;
@@ -2081,13 +2084,16 @@ function initCatalogueAndEnquiry(announcer) {
       }
     }
 
-    // Related Formulations (Different strength / form)
+    // Related Formulations (Collapsed native <details> disclosure)
     if (relSection && relList) {
       relList.textContent = '';
-      if (related.length > 0) {
+      relSection.open = false;
+      const relSlice = related.slice(0, 4);
+      if (relCountEl) relCountEl.textContent = String(relSlice.length);
+      if (relSlice.length > 0) {
         const frag = document.createDocumentFragment();
-        related.slice(0, 4).forEach((rec) => {
-          frag.append(buildResultCard({ ...rec, _matchReason: 'Different Strength / Form' }, highlightTerms));
+        relSlice.forEach((rec) => {
+          frag.append(buildResultCard(rec, highlightTerms));
         });
         relList.append(frag);
         relSection.hidden = false;
@@ -2495,7 +2501,10 @@ function initCatalogueAndEnquiry(announcer) {
   };
 
   function showSelectionError() {
-    if (selectedPanel) selectedPanel.classList.add('has-error');
+    if (selectedPanel) {
+      selectedPanel.hidden = false;
+      selectedPanel.classList.add('has-error');
+    }
     if (selectionErrorEl) {
       selectionErrorEl.hidden = false;
       selectionErrorEl.classList.add('is-visible');
@@ -2503,7 +2512,10 @@ function initCatalogueAndEnquiry(announcer) {
   }
 
   function clearSelectionError() {
-    if (selectedPanel) selectedPanel.classList.remove('has-error');
+    if (selectedPanel) {
+      selectedPanel.classList.remove('has-error');
+      if (selectedMap.size === 0) selectedPanel.hidden = true;
+    }
     if (selectionErrorEl) {
       selectionErrorEl.hidden = true;
       selectionErrorEl.classList.remove('is-visible');

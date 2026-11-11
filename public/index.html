@@ -204,14 +204,9 @@
         </div>
 
         <div class="enquiry-search-shell inquiry-form-card">
-          <form id="availability-enquiry-form" class="form-layout" aria-labelledby="enq-step2-heading" novalidate>
+          <form id="availability-enquiry-form" class="form-layout" aria-label="Search eye medicine and submit availability enquiry" novalidate>
             <!-- Step 1: PROMINENT Search Box + Quick Try Chips + Live Results -->
             <div class="enquiry-step-block">
-              <div class="enquiry-step-header">
-                <span class="step-pill">Step 1</span>
-                <h3 id="enq-step2-heading" data-i18n="enq-step2">Search Eye Medicine</h3>
-              </div>
-
               <div class="field medicine-search-field">
                 <label for="medicine-search" class="visually-hidden">Search medicine, brand, company or composition</label>
                 <div class="medicine-search-bar">
@@ -223,7 +218,7 @@
                     type="search"
                     id="medicine-search"
                     name="medicine_query"
-                    placeholder="Search brand, generic, composition or company (e.g. Refresh Tears, Moxicip, Cipla)..."
+                    placeholder="Search medicine, brand, or salt (e.g. Refresh Tears, Moxicip)..."
                     autocomplete="off"
                     autocorrect="off"
                     autocapitalize="none"
@@ -240,14 +235,13 @@
                   >&times;</button>
                 </div>
                 <div class="popular-search-row search-try-row" aria-label="Quick medicine searches">
-                  <span class="popular-search-label">Quick try:</span>
+                  <span class="popular-search-label">Try:</span>
                   <button type="button" class="quick-chip search-try-chip" data-query="Refresh Tears">Refresh Tears</button>
                   <button type="button" class="quick-chip search-try-chip" data-query="Moxicip">Moxicip</button>
                   <button type="button" class="quick-chip search-try-chip" data-query="Systane Ultra">Systane Ultra</button>
                   <button type="button" class="quick-chip search-try-chip" data-query="Lubrex">Lubrex</button>
                   <button type="button" class="quick-chip search-try-chip" data-query="Ciplox">Ciplox</button>
                   <button type="button" class="quick-chip search-try-chip" data-query="Iotim">Iotim</button>
-                  <button type="button" class="quick-chip search-try-chip" data-query="CMC 0.5%">CMC 0.5%</button>
                 </div>
               </div>
 
@@ -255,7 +249,7 @@
               <div id="medicine-search-panel" class="search-results-panel" hidden>
                 <div class="search-results-meta">
                   <span id="search-results-status" aria-live="polite"></span>
-                  <span id="search-source-badge" class="source-pill">Indian Ophthalmic Index</span>
+                  <span id="search-source-badge" class="source-pill">4,291+ items</span>
                 </div>
                 <div id="search-interpretation-bar" class="search-interpretation-bar" hidden></div>
                 <ul id="medicine-search-results" class="search-results-list" aria-label="Medicine search results"></ul>
@@ -264,29 +258,33 @@
                   <button type="button" id="search-load-more-btn" class="btn btn-secondary btn-sm"></button>
                 </div>
 
-                <!-- Equivalent Brands Discovery (Section 8: Same composition + strength + form) -->
-                <div id="search-alternatives-section" class="search-alt-section" hidden>
-                  <div class="search-alt-head">
-                    <h4 id="search-alt-heading" class="search-alt-heading">Same Composition &amp; Strength Alternatives</h4>
-                    <p class="search-alt-disclaimer">Matched on identical active ingredients, strength, and dosage form. Any substitution must be verified by a pharmacist or doctor at pickup.</p>
+                <!-- Equivalent Brands Discovery (Collapsed by default via native <details>) -->
+                <details id="search-alternatives-section" class="search-alt-accordion" hidden>
+                  <summary id="search-alt-heading" class="search-alt-summary">
+                    <span>Same Composition &amp; Strength (<span id="search-alt-count">0</span>)</span>
+                  </summary>
+                  <div class="search-alt-content">
+                    <p class="search-alt-disclaimer">Identical salt, strength &amp; form. Confirm any substitution with a doctor/pharmacist at pickup.</p>
+                    <ul id="search-alternatives-list" class="search-results-list" aria-label="Same composition alternative brands"></ul>
                   </div>
-                  <ul id="search-alternatives-list" class="search-results-list" aria-label="Same composition alternative brands"></ul>
-                </div>
+                </details>
 
-                <!-- Related Formulations (Different strength or dosage form) -->
-                <div id="search-related-section" class="search-alt-section" hidden>
-                  <div class="search-alt-head">
-                    <h4 id="search-related-heading" class="search-alt-heading">Related Formulations (Different Strength or Form)</h4>
-                    <p class="search-alt-disclaimer">Contains the same active ingredient in a different strength or dosage form. Confirm with your prescribing doctor before switching.</p>
+                <!-- Related Formulations (Collapsed by default via native <details>) -->
+                <details id="search-related-section" class="search-alt-accordion" hidden>
+                  <summary id="search-related-heading" class="search-alt-summary">
+                    <span>Other Strengths or Forms (<span id="search-related-count">0</span>)</span>
+                  </summary>
+                  <div class="search-alt-content">
+                    <p class="search-alt-disclaimer">Same active ingredient in a different strength or form. Confirm with your doctor before switching.</p>
+                    <ul id="search-related-list" class="search-results-list" aria-label="Related ophthalmic formulations"></ul>
                   </div>
-                  <ul id="search-related-list" class="search-results-list" aria-label="Related ophthalmic formulations"></ul>
-                </div>
+                </details>
 
-                <!-- Unmatched Search Fallback (Section 5: Never lose a customer enquiry) -->
+                <!-- Unmatched Search Fallback -->
                 <div id="search-fallback-box" class="search-fallback-box" hidden>
                   <div class="search-fallback-copy">
-                    <strong>Couldn&rsquo;t find an exact match? You can still send us your search.</strong>
-                    <span>We will check our store inventory against what you typed and confirm on callback.</span>
+                    <strong>Can&rsquo;t see your exact pack?</strong>
+                    <span>Add what you typed and staff will check shelf stock by call.</span>
                   </div>
                   <button type="button" id="add-unmatched-query-btn" class="btn btn-secondary btn-sm">
                     Add search to enquiry
@@ -295,8 +293,8 @@
               </div>
             </div>
 
-            <!-- Selected Medicines Section -->
-            <div class="enquiry-step-block selected-medicines-block" id="selected-medicines-panel">
+            <!-- Selected Medicines Section (Revealed once item added or on empty submit) -->
+            <div class="enquiry-step-block selected-medicines-block" id="selected-medicines-panel" hidden>
               <div class="selected-header-row">
                 <div class="enquiry-step-header">
                   <span class="step-pill">Selected</span>
@@ -305,22 +303,22 @@
                 <span id="selected-count-badge" class="selected-count-badge">0 selected</span>
               </div>
 
-              <p id="no-selected-hint" class="selected-empty-hint">
-                No medicines selected yet. Search above and tap <strong>Select</strong> on any matching product &mdash; or add your typed medicine search directly.
+              <p id="no-selected-hint" class="selected-empty-hint" hidden>
+                Tap <strong>Add</strong> on a medicine above, or submit what you searched.
               </p>
 
               <ul id="selected-medicines-list" class="selected-products-list" aria-live="polite"></ul>
 
               <div id="selection-error" class="error-msg" hidden>
                 <span role="img" aria-label="Error">&#x26A0;</span>
-                <span>Please search and select at least one medicine (or add your searched term) before submitting.</span>
+                <span>Please search and add at least one medicine before submitting.</span>
               </div>
             </div>
 
             <!-- Step 2: Compact Customer Details (ONLY 2 required fields) -->
             <div class="enquiry-step-block">
               <div class="enquiry-step-header">
-                <span class="step-pill">Step 2</span>
+                <span class="step-pill">Callback</span>
                 <h3 id="enq-step1-heading" data-i18n="enq-step1">Your Contact Details</h3>
               </div>
 
@@ -1362,7 +1360,7 @@
         </svg>
         <span>Drops</span>
       </a>
-      <a class="mobile-nav-item" href="#selected-medicines-panel" data-section="selected-medicines-panel">
+      <a class="mobile-nav-item" href="#availability-enquiry-form" data-section="selected-medicines-panel">
         <span class="mobile-nav-icon-wrap">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M9 11l3 3L22 4"/>
