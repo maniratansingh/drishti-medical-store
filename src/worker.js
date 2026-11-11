@@ -1,10 +1,9 @@
 /**
- * Cloudflare Pages Function: POST /api/enquiry
+ * Cloudflare Worker Entrypoint (Workers + Static Assets)
  *
- * Accepts a search-first medicine availability enquiry from the frontend,
- * formats a structured counter notification, optionally persists to ENQUIRIES_KV
- * (if bound), and forwards the alert to the store's Telegram chat using
- * server-side secrets ONLY:
+ * Static assets in ./public are served directly by Cloudflare's edge before this
+ * Worker is invoked. Requests to /api/enquiry are handled here for validation,
+ * optional ENQUIRIES_KV persistence, and Telegram notifications using secrets:
  *   - env.TELEGRAM_BOT_TOKEN
  *   - env.TELEGRAM_CHAT_ID
  */
@@ -120,13 +119,7 @@ export function buildTelegramMessage({
   return lines.join('\n');
 }
 
-export async function onRequestOptions() {
-  return new Response(null, { status: 204, headers: CORS_HEADERS });
-}
-
-export async function onRequestPost(context) {
-  const { request, env } = context;
-
+async function handleEnquiryPost(request, env) {
   let payload;
   try {
     payload = await request.json();
@@ -263,3 +256,25 @@ export async function onRequestPost(context) {
     );
   }
 }
+
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+
+    if (url.pathname === '/api/enquiry') {
+      if (request.method === 'OPTIONS') {
+        return new Response(null, { status: 204, headers: CORS_HEADERS });
+      }
+      if (request.method === 'POST') {
+        return handleEnquiryPost(request, env);
+      }
+      return jsonResponse({ ok: false, error: 'Method not allowed.' }, 405);
+    }
+
+    if (env?.ASSETS) {
+      return env.ASSETS.fetch(request);
+    }
+
+    return new Response('Not found', { status: 404 });
+  },
+};

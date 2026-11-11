@@ -1,0 +1,11 @@
+{
+  "name": "drishti-medical-store",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-11-11",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}

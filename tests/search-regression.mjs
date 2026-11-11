@@ -16,9 +16,9 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 
-const appSrc = fs.readFileSync(path.join(rootDir, 'app.js'), 'utf8');
+const appSrc = fs.readFileSync(path.join(rootDir, 'public', 'app.js'), 'utf8');
 const db = JSON.parse(
-  fs.readFileSync(path.join(rootDir, 'assets', 'data', 'ophthalmic-products.json'), 'utf8')
+  fs.readFileSync(path.join(rootDir, 'public', 'assets', 'data', 'ophthalmic-products.json'), 'utf8')
 );
 
 const sandbox = { console };

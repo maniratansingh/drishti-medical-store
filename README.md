@@ -35,25 +35,27 @@ const STORE_CONFIG = {
 
 Until Telegram secrets (or fallback contact channels) are configured, unconfigured environments generate an Enquiry Reference (`ENQ-...`), save a local copy on the customer's device, and offer **Copy Enquiry** / **Download (.txt)** backup so no search is lost.
 
-## Cloudflare Pages Deployment (Static + `/functions`)
+## Cloudflare Workers + Static Assets Deployment (Default `npx wrangler deploy`)
 
-### Option 1: Direct Upload / Git Integration
-- **Framework preset:** `None`
-- **Build command:** *(empty)*
-- **Build output directory:** `.` (`functions/api/enquiry.js` deploys automatically alongside static files)
+This project is pre-configured via `wrangler.jsonc` (`main: "src/worker.js"`, `assets.directory: "./public"`) so both **Cloudflare Git Integration** (`npx wrangler deploy`) and **Wrangler CLI** deploy static files and `/api/enquiry` cleanly with zero manual build flags:
 
-### Option 2: Wrangler CLI
 ```sh
-npx wrangler pages deploy . --project-name=drishti-medical-store
+npx wrangler deploy
 ```
+
+### Cloudflare Git Integration Settings
+- **Build command:** *(empty)*
+- **Deploy command:** `npx wrangler deploy` (Cloudflare default)
+
+### Classic Cloudflare Pages Only (If explicitly deploying Static Assets without `wrangler.jsonc`)
+- **Build output directory:** `public`
 
 ## Included Files
 
-- `index.html` — Landing page, featured ophthalmic catalogue showcase, mobile-first **Find Your Eye Medicine** availability enquiry system, store pickup details, and `LocalBusiness`/`Pharmacy` JSON-LD.
-- `functions/api/enquiry.js` — Cloudflare Pages Function validating customer enquiries and forwarding formatted alerts to Telegram.
-- `assets/data/ophthalmic-products.json` — Locally indexed Indian ophthalmic product catalogue (`4,291` active eye drops, ophthalmic solutions, gels, ointments, oral ophthalmic tablets, Jan Aushadhi PMBJP generics, and curated eye-care supplies) compiled from MIT-licensed [`junioralive/Indian-Medicine-Dataset`](https://github.com/junioralive/Indian-Medicine-Dataset) and [`indiser/Rxcheck`](https://github.com/indiser/Rxcheck).
-- `styles.css` — Light/dark responsive stylesheet.
-- `app.js` — Client-side hybrid inverted-index ophthalmic search engine (12-tier field-aware ranking, phonetic & typo tolerance, Hindi/Devanagari transliteration, strength/pack/form decomposition, verified same-composition alternative brand discovery, highlighted progressive results), product specification `<dialog>`, multi-select enquiry state, form validation, and `/api/enquiry` submission controller.
+- `wrangler.jsonc` — Cloudflare Workers + Static Assets configuration (`main: "src/worker.js"`, `assets.directory: "./public"`).
+- `src/worker.js` — Cloudflare Worker handling `POST /api/enquiry` Telegram alerts (plus static asset fallback via `env.ASSETS`).
+- `public/index.html` — Landing page, search-first **Find Your Eye Medicine** availability enquiry system, featured ophthalmic catalogue showcase, store pickup details, and `LocalBusiness`/`Pharmacy` JSON-LD.
+- `public/assets/data/ophthalmic-products.json` — Locally indexed Indian ophthalmic product catalogue (`4,291` active items) compiled from MIT-licensed [`junioralive/Indian-Medicine-Dataset`](https://github.com/junioralive/Indian-Medicine-Dataset) and [`indiser/Rxcheck`](https://github.com/indiser/Rxcheck).
+- `public/styles.css` & `public/app.js` — Light/dark responsive stylesheet and client-side hybrid inverted-index ophthalmic search engine.
 - `tests/search-regression.mjs` — Repeatable 38-case automated search accuracy, relevance, and latency regression suite (`node tests/search-regression.mjs`).
-- `sitemap.xml` & `robots.txt` — Search indexing files pointing to `https://dms.piecs.org/`.
-- `_headers`, `_redirects`, `404.html`, `favicon.svg`, `manifest.webmanifest`, and `assets/images/`.
+- `public/sitemap.xml`, `public/robots.txt`, `public/_headers`, `public/_redirects`, `public/404.html`, `public/favicon.svg`, `public/manifest.webmanifest`, and `public/assets/images/`.
