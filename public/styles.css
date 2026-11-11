@@ -28,7 +28,7 @@
 }
 
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
 
   /* Raw Light Tokens (Harmonized with Sant Kabir Eye Hospital) */
   --bg-canvas-light: hsl(210, 36%, 98%);
@@ -46,7 +46,7 @@
   --brand-hover-light: hsl(212, 92%, 33%);
   --brand-on-primary-light: #ffffff;
   --brand-tint-light: hsl(212, 92%, 95%);
-  --accent-teal-light: hsl(174, 85%, 30%);
+  --accent-teal-light: hsl(174, 88%, 25%);
   --accent-teal-bg-light: hsl(174, 85%, 94%);
 
   --amber-text-light: #854d0e;
@@ -96,7 +96,7 @@
   --success-dark: #34d399;
   --success-bg-dark: #092c22;
 
-  /* Semantic Tokens */
+  /* Semantic Tokens (Light default fallback) */
   --color-canvas: var(--bg-canvas-light);
   --color-surface: var(--bg-surface-light);
   --color-subtle: var(--bg-subtle-light);
@@ -164,44 +164,81 @@
   accent-color: var(--color-brand);
 }
 
-@media (prefers-color-scheme: dark) {
+@supports (color: light-dark(white, black)) {
   :root {
-    --color-canvas: var(--bg-canvas-dark);
-    --color-surface: var(--bg-surface-dark);
-    --color-subtle: var(--bg-subtle-dark);
-    --color-glass: var(--bg-glass-dark);
-    --color-glass-strong: var(--bg-glass-strong-dark);
-    --color-chrome: var(--bg-chrome-dark);
+    --color-canvas: light-dark(var(--bg-canvas-light), var(--bg-canvas-dark));
+    --color-surface: light-dark(var(--bg-surface-light), var(--bg-surface-dark));
+    --color-subtle: light-dark(var(--bg-subtle-light), var(--bg-subtle-dark));
+    --color-glass: light-dark(var(--bg-glass-light), var(--bg-glass-dark));
+    --color-glass-strong: light-dark(var(--bg-glass-strong-light), var(--bg-glass-strong-dark));
+    --color-chrome: light-dark(var(--bg-chrome-light), var(--bg-chrome-dark));
 
-    --color-ink: var(--ink-primary-dark);
-    --color-ink-secondary: var(--ink-secondary-dark);
-    --color-ink-muted: var(--ink-muted-dark);
+    --color-ink: light-dark(var(--ink-primary-light), var(--ink-primary-dark));
+    --color-ink-secondary: light-dark(var(--ink-secondary-light), var(--ink-secondary-dark));
+    --color-ink-muted: light-dark(var(--ink-muted-light), var(--ink-muted-dark));
 
-    --color-brand: var(--brand-primary-dark);
-    --color-brand-hover: var(--brand-hover-dark);
-    --color-brand-text: var(--brand-on-primary-dark);
-    --color-brand-tint: var(--brand-tint-dark);
-    --color-accent: var(--accent-teal-dark);
-    --color-accent-bg: var(--accent-teal-bg-dark);
+    --color-brand: light-dark(var(--brand-primary-light), var(--brand-primary-dark));
+    --color-brand-hover: light-dark(var(--brand-hover-light), var(--brand-hover-dark));
+    --color-brand-text: light-dark(var(--brand-on-primary-light), var(--brand-on-primary-dark));
+    --color-brand-tint: light-dark(var(--brand-tint-light), var(--brand-tint-dark));
+    --color-accent: light-dark(var(--accent-teal-light), var(--accent-teal-dark));
+    --color-accent-bg: light-dark(var(--accent-teal-bg-light), var(--accent-teal-bg-dark));
 
-    --color-amber-text: var(--amber-text-dark);
-    --color-amber-bg: var(--amber-bg-dark);
-    --color-amber-border: var(--amber-border-dark);
+    --color-amber-text: light-dark(var(--amber-text-light), var(--amber-text-dark));
+    --color-amber-bg: light-dark(var(--amber-bg-light), var(--amber-bg-dark));
+    --color-amber-border: light-dark(var(--amber-border-light), var(--amber-border-dark));
 
-    --color-border: var(--border-subtle-dark);
-    --color-control-border: var(--border-control-dark);
-    --color-bevel-hi: var(--border-bevel-hi-dark);
-    --color-bevel-lo: var(--border-bevel-lo-dark);
+    --color-border: light-dark(var(--border-subtle-light), var(--border-subtle-dark));
+    --color-control-border: light-dark(var(--border-control-light), var(--border-control-dark));
+    --color-bevel-hi: light-dark(var(--border-bevel-hi-light), var(--border-bevel-hi-dark));
+    --color-bevel-lo: light-dark(var(--border-bevel-lo-light), var(--border-bevel-lo-dark));
 
-    --color-danger: var(--danger-dark);
-    --color-danger-bg: var(--danger-bg-dark);
-    --color-success: var(--success-dark);
-    --color-success-bg: var(--success-bg-dark);
-
-    --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.35), 0 20px 40px -8px rgba(0, 0, 0, 0.45);
-    --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.45), 0 30px 60px -12px rgba(0, 0, 0, 0.6);
+    --color-danger: light-dark(var(--danger-light), var(--danger-dark));
+    --color-danger-bg: light-dark(var(--danger-bg-light), var(--danger-bg-dark));
+    --color-success: light-dark(var(--success-light), var(--success-dark));
+    --color-success-bg: light-dark(var(--success-bg-light), var(--success-bg-dark));
   }
+}
+
+:root[data-theme="dark"],
+:root:has(> head > meta[name="color-scheme"][content="dark"]) {
+  color-scheme: dark;
+
+  --color-canvas: var(--bg-canvas-dark);
+  --color-surface: var(--bg-surface-dark);
+  --color-subtle: var(--bg-subtle-dark);
+  --color-glass: var(--bg-glass-dark);
+  --color-glass-strong: var(--bg-glass-strong-dark);
+  --color-chrome: var(--bg-chrome-dark);
+
+  --color-ink: var(--ink-primary-dark);
+  --color-ink-secondary: var(--ink-secondary-dark);
+  --color-ink-muted: var(--ink-muted-dark);
+
+  --color-brand: var(--brand-primary-dark);
+  --color-brand-hover: var(--brand-hover-dark);
+  --color-brand-text: var(--brand-on-primary-dark);
+  --color-brand-tint: var(--brand-tint-dark);
+  --color-accent: var(--accent-teal-dark);
+  --color-accent-bg: var(--accent-teal-bg-dark);
+
+  --color-amber-text: var(--amber-text-dark);
+  --color-amber-bg: var(--amber-bg-dark);
+  --color-amber-border: var(--amber-border-dark);
+
+  --color-border: var(--border-subtle-dark);
+  --color-control-border: var(--border-control-dark);
+  --color-bevel-hi: var(--border-bevel-hi-dark);
+  --color-bevel-lo: var(--border-bevel-lo-dark);
+
+  --color-danger: var(--danger-dark);
+  --color-danger-bg: var(--danger-bg-dark);
+  --color-success: var(--success-dark);
+  --color-success-bg: var(--success-bg-dark);
+
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.35), 0 20px 40px -8px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.45), 0 30px 60px -12px rgba(0, 0, 0, 0.6);
 }
 
 /* ==========================================================================
@@ -499,11 +536,10 @@ p {
   box-shadow: var(--shadow-md);
 }
 
-@media (prefers-color-scheme: dark) {
-  .glass-section-head {
-    background: linear-gradient(135deg, rgba(15, 29, 50, 0.80) 0%, rgba(15, 29, 50, 0.62) 100%);
-    border-color: var(--color-border);
-  }
+:root[data-theme="dark"] .glass-section-head,
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .glass-section-head {
+  background: linear-gradient(135deg, rgba(15, 29, 50, 0.80) 0%, rgba(15, 29, 50, 0.62) 100%);
+  border-color: var(--color-border);
 }
 
 .sub-title,
@@ -742,6 +778,47 @@ p {
   gap: 0.45rem;
 }
 
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 2.75rem;
+  min-block-size: 2.75rem;
+  padding: 0.45rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background: var(--color-glass);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease, transform 100ms ease-out;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--color-brand);
+  background-color: var(--color-brand-tint);
+  color: var(--color-brand);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle-btn .theme-icon-sun {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle-btn .theme-icon-moon,
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .theme-toggle-btn .theme-icon-moon {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle-btn .theme-icon-sun,
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .theme-toggle-btn .theme-icon-sun {
+  display: block;
+}
+
 .lang-switch-wrapper {
   display: inline-flex;
   align-items: center;
@@ -856,6 +933,10 @@ p {
 }
 
 @media (max-width: 28rem) {
+  .header-actions-group {
+    gap: 0.3rem;
+  }
+
   .site-logo {
     gap: 0.4rem;
   }
@@ -1107,10 +1188,9 @@ p {
   background: linear-gradient(to bottom, rgba(245, 248, 250, 0.14) 0%, rgba(245, 248, 250, 0.28) 100%);
 }
 
-@media (prefers-color-scheme: dark) {
-  .section-backdrop::after {
-    background: linear-gradient(to bottom, rgba(9, 19, 34, 0.62) 0%, rgba(9, 19, 34, 0.80) 100%);
-  }
+:root[data-theme="dark"] .section-backdrop::after,
+:root:has(> head > meta[name="color-scheme"][content="dark"]) .section-backdrop::after {
+  background: linear-gradient(to bottom, rgba(9, 19, 34, 0.62) 0%, rgba(9, 19, 34, 0.80) 100%);
 }
 
 .hero-glass-card {

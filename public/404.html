@@ -3,9 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#091322" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f8fafc" id="theme-color-meta">
+  <script>
+    try {
+      var savedTheme = localStorage.getItem('dms_theme');
+      if (savedTheme === 'dark' || savedTheme === 'light') {
+        document.documentElement.dataset.theme = savedTheme;
+        document.querySelector('meta[name="color-scheme"]').content = savedTheme;
+        document.getElementById('theme-color-meta').content = savedTheme === 'dark' ? '#091322' : '#f8fafc';
+      }
+    } catch {}
+  </script>
   <meta name="robots" content="noindex">
   <title>Page Not Found | Drishti Medical Store (DMS)</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">

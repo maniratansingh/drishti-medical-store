@@ -2941,6 +2941,66 @@ function initLanguageSwitch(announcer) {
   btnHi.addEventListener('click', () => setLanguage('hi'));
 }
 
+// 8b. Light / Dark Mode Switch (Light default; overrides via <meta name="color-scheme"> + data-theme)
+function initThemeToggle(announcer) {
+  const toggleBtn = document.getElementById('theme-toggle-btn');
+  const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+  const themeColorMeta = document.getElementById('theme-color-meta');
+  const storageKey = 'dms_theme';
+
+  const getCurrentTheme = () => {
+    if (document.documentElement.dataset.theme === 'dark') return 'dark';
+    if (colorSchemeMeta?.content === 'dark') return 'dark';
+    return 'light';
+  };
+
+  const applyTheme = (nextTheme, { persist = false, announce = false } = {}) => {
+    const resolved = nextTheme === 'dark' ? 'dark' : 'light';
+    const isDark = resolved === 'dark';
+
+    document.documentElement.dataset.theme = resolved;
+    if (colorSchemeMeta) colorSchemeMeta.content = resolved;
+    if (themeColorMeta) themeColorMeta.content = isDark ? '#091322' : '#f8fafc';
+
+    if (toggleBtn) {
+      const nextLabel = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+      toggleBtn.setAttribute('aria-pressed', String(isDark));
+      toggleBtn.setAttribute('aria-label', nextLabel);
+      toggleBtn.setAttribute('title', nextLabel);
+    }
+
+    if (persist) {
+      try {
+        localStorage.setItem(storageKey, resolved);
+      } catch {}
+    }
+
+    if (announce) {
+      const isHi = document.documentElement.lang === 'hi';
+      const msg = isHi
+        ? isDark
+          ? 'डार्क मोड चालू किया गया।'
+          : 'लाइट मोड चालू किया गया।'
+        : isDark
+          ? 'Dark mode enabled.'
+          : 'Light mode enabled.';
+      announcePolite(announcer, msg);
+    }
+  };
+
+  applyTheme(getCurrentTheme());
+
+  toggleBtn?.addEventListener('click', () => {
+    const nextTheme = getCurrentTheme() === 'dark' ? 'light' : 'dark';
+    applyTheme(nextTheme, { persist: true, announce: true });
+  });
+
+  window.addEventListener('storage', (event) => {
+    if (event.key !== storageKey) return;
+    applyTheme(event.newValue === 'dark' ? 'dark' : 'light');
+  });
+}
+
 // 9. Boot
 document.addEventListener('DOMContentLoaded', () => {
   const announcer = createPoliteAnnouncer();
@@ -2948,4 +3008,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initCatalogueAndEnquiry(announcer);
   initStoreContactActions(announcer);
   initLanguageSwitch(announcer);
+  initThemeToggle(announcer);
 });
