@@ -1,0 +1,20 @@
+# Drishti Medical Store (दृष्टि मेडिकल स्टोर) — DMS
+
+> Informational ophthalmic product catalogue and local counter availability enquiry portal at https://dms.piecs.org/
+
+Drishti Medical Store (DMS — "Drishti" meaning Vision / Sight) is a **dedicated eye-only ophthalmic medical store** dealing strictly in **eyes and eye-care medicines and supplies only (nothing outside ophthalmology)** — including everyday needed eye drops, **pre-operative precautionary medicines**, and **post-operative eye recovery medicines** — physically located inside **Sant Kabir Eye Hospital, Bansi Road, Near Pindari Hospital, Katra, Basti, Moor Ghat, Uttar Pradesh – 272001, India** ([santkabireyehospital.piecs.org](https://santkabireyehospital.piecs.org/) | Google Maps Pin: https://maps.app.goo.gl/5BYvRvsRoLVSubBW9 | OPD Hours: Monday–Saturday 9:00 AM – 6:00 PM | Campus Hospital Inquiry: +91-9336466677).
+
+- **Official Counter Billing:** Customers receive an **official itemized bill** on every physical counter pickup.
+
+## Non-Exhaustive Product List & Search-First Availability Enquiries Only (No Online Ordering or Delivery)
+
+- **This is NOT an e-commerce store and NOT an online ordering platform.** We do NOT accept online orders, process online payments, or provide home/online delivery.
+- **Not an exhaustive inventory list:** The homepage highlights popular eye drops and example ophthalmic categories, NOT all items stocked or available. Customers can search our locally indexed Indian ophthalmic product catalogue (built from curated store supplies and open Indian pharmaceutical data from `junioralive/Indian-Medicine-Dataset`) by medicine name, brand, company, or composition.
+- **Callback confirmation, physical pickup & itemized billing:** Customers enter their name and mobile number, search for matching medicines (or send an unmatched search query cleanly), select one or more items, and submit an availability enquiry (`POST /api/enquiry`). Store staff respond **via phone call** to confirm actual availability and price, after which customers collect pickup in person at Drishti Medical Store inside Sant Kabir Eye Hospital, Bansi Road, Katra, Basti – 272001 with a valid prescription and receive an **official itemized bill**.
+
+## Strict Medical, Prescribing & Prescription Policy
+
+- **We do NOT prescribe any medicine in any form:** Drishti Medical Store staff and this website do NOT prescribe, diagnose, recommend treatment, or substitute medicines.
+- **Informational display only:** The products listed on https://dms.piecs.org/ merely display general examples of different types of eye drops, lubricating gels, ophthalmic ointments, and eye-care supplies for local reference and availability checking.
+- **No medicine without a valid prescription:** Prescription ophthalmic medicines are strictly based on a licensed doctor's recommendation. Without a valid written prescription, no prescription medicine will be provided.
+- **Ophthalmologist prescription recommended & mandatory for pickup:** A written prescription issued by a registered legal medical practitioner / doctor—and specifically by a qualified **ophthalmologist (eye specialist)** (for example, following a hospital eye consultation)—is recommended. **Even after receiving an availability confirmation for a pickup enquiry, the customer must bring the original valid written prescription to the counter at pickup.**

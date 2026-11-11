@@ -1,0 +1,16 @@
+{
+  "name": "Drishti Medical Store (DMS)",
+  "short_name": "Drishti Medical",
+  "description": "Ophthalmic medical store at Sant Kabir Eye Hospital, Bansi Road, Katra, Basti (272001). Eye drops, lubricating gels, eye ointments and eye-care essentials.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f9fa",
+  "theme_color": "#0b5d66",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

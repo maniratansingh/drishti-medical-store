@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dms.piecs.org/sitemap.xml
